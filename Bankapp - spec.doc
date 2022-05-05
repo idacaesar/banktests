@@ -1,0 +1,22 @@
+Vad ska ni göra
+Projektuppgiften går ut på att ta fram ett enkelt system för en fiktiv bank. Banken har ett antal kunder och varje kund kan ha ett eller flera olika bankkonton
+
+Banken erbjuder för tillfället endast konton av typen debitkonto (Account) 
+Börja med att skapa en klass som definierar konto (Account), en klass som definierar kund (Customer) samt en bank klass (Bank).
+Alla klasser ska importeras in i main.
+
+
+I Banken ska man kunna: 
+Printa en lista med bankens kunder (personnummer, för och efternamn)
+Lägga till en ny kund med ett unikt personnummer.
+Ändra en kunds namn (personnummer ska inte kunna ändras).
+Ta bort en befintlig kund, befintliga konton måste också avslutas.
+Skapa konto (Account) till en befintlig kund, ett unikt kontonummer genereras.
+Konton ska även kunna avslutas via kontonummer attributet, saldo skrivs ut och kontot tas bort.
+
+
+För varje kund ska man kunna utföra följande:
+Se information om vald kund inklusive alla konton (kontonummer, saldo, kontotyp).
+Sätta in pengar på ett konto.
+Ta ut pengar från kontot (men bara om saldot täcker uttagsbeloppet).
+

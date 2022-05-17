@@ -1,5 +1,6 @@
 using Xunit;
 using TestverktygInlämning2;
+using System.Globalization;
 
 namespace banktests;
 
@@ -52,6 +53,8 @@ public class Ida_Account_Test
   public void ToString_returnsCorrectly()
   {
     // Arrange
+    CultureInfo.CurrentCulture = new CultureInfo("en-GB");
+
     var account = new Account();
     account.accountNumber = 12345;
     account.accountType = "Test";

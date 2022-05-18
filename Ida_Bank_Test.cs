@@ -84,4 +84,20 @@ public class Ida_Bank_Test
     Assert.Equal("19760314", result[1]);
     Assert.Equal("1005 debit 200", result[2]);
   }
+
+  [Fact]
+  public void GetCustomer_customerData()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    var result = bank.GetCustomer("19860107");
+
+    // Assert
+    Assert.Equal("19860107", result.personalNumber);
+  }
 }

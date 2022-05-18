@@ -68,7 +68,7 @@ public class Ida_Bank_Test
   }
 
   [Fact]
-  public void xaddCustomer_customerWasAdded()
+  public void getCustomerInfo_returnInfo()
   {
     // Arrange
     var bank = new Bank();
@@ -77,12 +77,11 @@ public class Ida_Bank_Test
     bank.Load(currentDirectory + "/../../../data.txt");
 
     // Act
-    //var result = bank.AddCustomer("Linda", "0101011904");
+    var result = bank.GetCustomerInfo("19760314");
 
     // Assert
-    //var customers = bank.GetCustomers();
-
-    //Assert.Equal(4, customers.Count);
-    //Assert.Equal("0101011904", customers[3].personalNumber);
+    Assert.Equal("Manuel", result[0]);
+    Assert.Equal("19760314", result[1]);
+    Assert.Equal("1005 debit 200", result[2]);
   }
 }

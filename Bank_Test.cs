@@ -4,24 +4,26 @@ using System.Collections.Generic;
 using Xunit.Abstractions;
 using System.IO;
 using System.Linq;
+using System;
 
 namespace banktests;
 
 public class Ida_Bank_Test
 {
-  private ITestOutputHelper testOutputHelper;
+  private ITestOutputHelper _testOutputHelper;
 
-  public Ida_Bank_Test(ITestOutputHelper helper)
+  public Ida_Bank_Test(ITestOutputHelper testOutputHelper)
   {
-    testOutputHelper = helper;
+    _testOutputHelper = testOutputHelper;
   }
 
   [Fact]
-  public void getCustomers_dataWasLoaded()
+  public void getCustomers_dataWasReturned()
   {
     // Arrange
     var bank = new Bank();
 
+    _testOutputHelper.WriteLine("Loading data");
     var currentDirectory = Directory.GetCurrentDirectory();
     bank.Load(currentDirectory + "/../../../data.txt");
 
@@ -34,7 +36,20 @@ public class Ida_Bank_Test
   }
 
   [Fact]
-  public void addCustomer_returnedTrue()
+  public void load_wrongPath_errorReturned()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    // Act and Assert
+    _testOutputHelper.WriteLine("Loading data from wrong path");
+    Assert.Throws<FileNotFoundException>(() => bank.Load("ootasctx.txt"));
+  }
+
+  [Theory]
+  [InlineData("Linda", "0101011904")]
+  [InlineData("Bruno", "0202021903")]
+  public void addCustomer_returnedTrue(string name, string personalNumber)
   {
     // Arrange
     var bank = new Bank();
@@ -43,14 +58,18 @@ public class Ida_Bank_Test
     bank.Load(currentDirectory + "/../../../data.txt");
 
     // Act
-    var result = bank.AddCustomer("Linda", "0101011904");
+    var result = bank.AddCustomer(name, personalNumber);
+    _testOutputHelper.WriteLine("Adding customer with name " + name + " and personalnumber " + personalNumber);
+
 
     // Assert
     Assert.Equal(true, result);
   }
 
-  [Fact]
-  public void addCustomer_customerWasAdded()
+  [Theory]
+  [InlineData("Linda", "0101011904")]
+  [InlineData("Bruno", "0202021903")]
+  public void addCustomer_customerWasAdded(string name, string personalNumber)
   {
     // Arrange
     var bank = new Bank();
@@ -59,13 +78,15 @@ public class Ida_Bank_Test
     bank.Load(currentDirectory + "/../../../data.txt");
 
     // Act
-    var result = bank.AddCustomer("Linda", "0101011904");
+    var result = bank.AddCustomer(name, personalNumber);
 
     // Assert
     var customers = bank.GetCustomers();
 
     Assert.Equal(4, customers.Count);
-    Assert.Equal("0101011904", customers[3].personalNumber);
+    Assert.Equal(personalNumber, customers[3].personalNumber);
+    _testOutputHelper.WriteLine("Comparing expected personalnumber " + personalNumber + " with actual personalnumber " + customers[3].personalNumber);
+
   }
 
   [Fact]

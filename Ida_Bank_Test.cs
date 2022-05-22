@@ -242,4 +242,37 @@ public class Ida_Bank_Test
     Assert.Equal(4000, account.balance);
   }
 
+  [Fact]
+  public void CloseAccount_accountClosed_returnsBalance()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    var result = bank.CloseAccount("19760314", 1005);
+
+    // Assert
+    Assert.Equal(false, string.IsNullOrEmpty(result));
+  }
+
+  [Fact]
+  public void CloseAccount_accountClosed_accountWasRemoved()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    var result = bank.CloseAccount("19760314", 1005);
+
+    // Assert
+    var account = bank.GetAccount("19760314", 1005);
+    Assert.Null(account);
+  }
+
 }

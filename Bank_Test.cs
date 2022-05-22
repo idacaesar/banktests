@@ -5,6 +5,7 @@ using Xunit.Abstractions;
 using System.IO;
 using System.Linq;
 using System;
+using Moq;
 
 namespace banktests;
 
@@ -228,6 +229,23 @@ public class Ida_Bank_Test
     Assert.Equal(false, string.IsNullOrEmpty(result));
   }
 
+  [Fact]
+  public void GetAccountInfo_mock_returnsStringinfo()
+  {
+    // Arrange
+    var bankMock = new Moq.Mock<Bank>();
+    bankMock.Setup(b => b.GetAccountInfo(It.IsAny<string>(), It.IsAny<int>())).Returns("1001 5000 debit");
+
+    var bank = bankMock.Object;
+
+
+    // Act
+    var result = bank.GetAccountInfo("19860107", 1003);
+
+    // Assert
+    Assert.Equal("1001 5000 debit", result);
+  }
+
 
   [Fact]
   public void Deposit_balanceIncreased()
@@ -262,6 +280,8 @@ public class Ida_Bank_Test
     var account = bank.GetAccount("19911111", 1001);
     Assert.Equal(4000, account.balance);
   }
+
+  
 
   [Fact]
   public void CloseAccount_accountClosed_returnsBalance()

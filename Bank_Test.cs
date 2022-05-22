@@ -282,6 +282,21 @@ public class Ida_Bank_Test
   }
 
   
+  [Fact]
+  public void Withdraw_mock_returnsTrue()
+  {
+    // Arrange
+    var bankMock = new Moq.Mock<Bank>();
+    bankMock.Setup(b => b.Withdraw(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<float>())).Returns(true);
+
+    var bank = bankMock.Object;
+
+    // Act
+    var result = bank.Withdraw("19911111", 1001, 1000);
+
+    // Assert
+    Assert.Equal(true, result);
+  }
 
   [Fact]
   public void CloseAccount_accountClosed_returnsBalance()

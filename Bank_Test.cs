@@ -15,6 +15,7 @@ public class Ida_Bank_Test
 
   public Ida_Bank_Test(ITestOutputHelper testOutputHelper)
   {
+    // Lagra referens till testOutputHelper
     _testOutputHelper = testOutputHelper;
   }
 
@@ -25,7 +26,11 @@ public class Ida_Bank_Test
     var bank = new Bank();
 
     _testOutputHelper.WriteLine("Loading data");
+
+    // Hämta aktuell mapp
     var currentDirectory = Directory.GetCurrentDirectory();
+
+    // Läs in data till banken från datafilen som ligger tre mappar upp
     bank.Load(currentDirectory + "/../../../data.txt");
 
     // Act
@@ -44,6 +49,8 @@ public class Ida_Bank_Test
 
     // Act and Assert
     _testOutputHelper.WriteLine("Loading data from wrong path");
+
+    // Förväntar oss att få FileNotFoundException
     Assert.Throws<FileNotFoundException>(() => bank.Load("ootasctx.txt"));
   }
 
@@ -61,7 +68,6 @@ public class Ida_Bank_Test
     // Act
     var result = bank.AddCustomer(name, personalNumber);
     _testOutputHelper.WriteLine("Adding customer with name " + name + " and personalnumber " + personalNumber);
-
 
     // Assert
     Assert.Equal(true, result);
@@ -101,10 +107,12 @@ public class Ida_Bank_Test
     bank.Load(currentDirectory + "/../../../data.txt");
 
     // Act
+    // Lägg till två kunder med samma personnummer
     var result1 = bank.AddCustomer("Malte", "150204");
     var result2 = bank.AddCustomer("Karl", "150204");
 
     // Assert
+    // Den första ska ge true, den andra ska ge false
     Assert.Equal(true, result1);
     Assert.Equal(false, result2);
   }
@@ -186,6 +194,7 @@ public class Ida_Bank_Test
     var result = bank.ChangeCustomerName("Benny", "19911111");
 
     // Assert
+    // Hämta kundlistan igen från bank för att kunna asserta
     var customers = bank.GetCustomers();
     Assert.Equal(true, result);
     Assert.Contains(customers, customer => customer.personalNumber == "19911111" && customer.firstName == "Benny");
@@ -270,6 +279,7 @@ public class Ida_Bank_Test
     bank.Load(currentDirectory + "/../../../data.txt");
 
     // Act
+    // Enligt kommentar ska detta returnera -1
     var result = bank.AddAccount("");
 
     // Assert
@@ -331,9 +341,12 @@ public class Ida_Bank_Test
   public void GetAccountInfo_mock_returnsStringinfo()
   {
     // Arrange
+    // Skapa mock för bank
     var bankMock = new Moq.Mock<Bank>();
+    // Returnera en standard string om metoden anropas korrekt
     bankMock.Setup(b => b.GetAccountInfo(It.IsAny<string>(), It.IsAny<int>())).Returns("1001 5000 debit");
 
+    // Hämta bank objektet från Bank mocken
     var bank = bankMock.Object;
 
 

@@ -6,7 +6,6 @@ namespace banktests;
 
 public class Ida_Account_Test
 {
-  // Testatanrop_indata_förväntatresultat
   [Fact]
   public void setAccountNumber_wasSet()
   {
@@ -52,7 +51,8 @@ public class Ida_Account_Test
   [Fact]
   public void ToString_returnsCorrectly()
   {
-    // Arrange
+    // Arrange 
+    // Använd alltid samma nummer format
     CultureInfo.CurrentCulture = new CultureInfo("en-GB");
 
     var account = new Account();
@@ -72,6 +72,7 @@ public class Ida_Account_Test
   public void ToString_otherData_returnsCorrectly()
   {
     // Arrange
+    // Använd alltid samma nummer format
     CultureInfo.CurrentCulture = new CultureInfo("en-GB");
 
     var account = new Account();

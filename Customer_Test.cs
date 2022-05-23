@@ -77,11 +77,11 @@ public class Ida_Customer_Test
     account2.accountType = "Test2";
     account2.balance = 999.6F;
 
+    // Lägg till båda kontona i kundens kontolista 
     customer.customerAccounts.Add(account1);
     customer.customerAccounts.Add(account2);
 
     // Assert
-    //Assert.Equal("123456", customer.personalNumber);
     Assert.Equal(2, customer.customerAccounts.Count);
     Assert.Equal("Test", customer.customerAccounts[0].accountType);
   }

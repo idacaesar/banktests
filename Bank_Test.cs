@@ -50,7 +50,7 @@ public class Ida_Bank_Test
   [Theory]
   [InlineData("Linda", "0101011904")]
   [InlineData("Bruno", "0202021903")]
-  public void addCustomer_returnedTrue(string name, string personalNumber)
+  public void addCustomer_returnsTrue(string name, string personalNumber)
   {
     // Arrange
     var bank = new Bank();
@@ -90,6 +90,25 @@ public class Ida_Bank_Test
 
   }
 
+
+  [Fact]
+  public void addCustomer_twoCustomersWithSamePersonalNumber_returnsFalse()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    var result1 = bank.AddCustomer("Malte", "150204");
+    var result2 = bank.AddCustomer("Karl", "150204");
+
+    // Assert
+    Assert.Equal(true, result1);
+    Assert.Equal(false, result2);
+  }
+
   [Fact]
   public void getCustomerInfo_returnInfo()
   {
@@ -109,7 +128,20 @@ public class Ida_Bank_Test
   }
 
   [Fact]
-  public void GetCustomer_customerData()
+  public void getCustomerInfo_wrongPersonalNumber_throwsException()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act and assert
+    Assert.Throws<NullReferenceException>(() => bank.GetCustomerInfo("19760000"));
+  }
+
+  [Fact]
+  public void GetCustomer_customerDataReturned()
   {
     // Arrange
     var bank = new Bank();
@@ -122,6 +154,23 @@ public class Ida_Bank_Test
 
     // Assert
     Assert.Equal("19860107", result.personalNumber);
+    Assert.Equal("Linnea", result.firstName);
+  }
+
+  [Fact]
+  public void GetCustomer_wrongPersonalNumber_returnsNull()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    var result = bank.GetCustomer("1987777");
+
+    // Assert
+    Assert.Null(result);
   }
 
   [Fact]
@@ -177,6 +226,23 @@ public class Ida_Bank_Test
   }
 
   [Fact]
+  public void removeCustomer_wrongPersonalNumber_noCustomerRemoved()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    bank.RemoveCustomer("19768888");
+
+    // Assert
+    var customers = bank.GetCustomers();
+    Assert.Equal(3, customers.Count);
+  }
+
+  [Fact]
   public void AddAccount_accountAdded()
   {
     // Arrange
@@ -195,7 +261,23 @@ public class Ida_Bank_Test
   }
 
   [Fact]
-  public void GetAccount_accountData()
+  public void AddAccount_emptyPersonalNumber_returnsMinus1()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    var result = bank.AddAccount("");
+
+    // Assert
+    Assert.Equal(-1, result);
+  }
+
+  [Fact]
+  public void GetAccount_accountDataReturned()
   {
     // Arrange
     var bank = new Bank();
@@ -210,6 +292,22 @@ public class Ida_Bank_Test
     Assert.Equal("debit", result.accountType);
     Assert.Equal(1005, result.accountNumber);
     Assert.Equal(200, result.balance);
+  }
+
+  [Fact]
+  public void GetAccount_wrongAccountId_returnsNull()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    Account result = bank.GetAccount("19760314", 9999);
+
+    // Assert
+    Assert.Null(result);
   }
 
   [Fact]
@@ -263,6 +361,21 @@ public class Ida_Bank_Test
     var account = bank.GetAccount("19911111", 1001);
     Assert.Equal(10000, account.balance);
   }
+  [Fact]
+  public void Deposit_wrongAccountId_returnsFalse()
+  {
+    // Arrange
+    var bank = new Bank();
+
+    var currentDirectory = Directory.GetCurrentDirectory();
+    bank.Load(currentDirectory + "/../../../data.txt");
+
+    // Act
+    var result = bank.Deposit("19911111", 3333, 5000);
+
+    // Assert
+    Assert.Equal(false, result);
+  }
 
   [Fact]
   public void Withdraw_balanceReduction()
@@ -281,7 +394,7 @@ public class Ida_Bank_Test
     Assert.Equal(4000, account.balance);
   }
 
-  
+
   [Fact]
   public void Withdraw_mock_returnsTrue()
   {
@@ -330,5 +443,4 @@ public class Ida_Bank_Test
     var account = bank.GetAccount("19760314", 1005);
     Assert.Null(account);
   }
-
 }

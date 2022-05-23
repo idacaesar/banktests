@@ -67,4 +67,23 @@ public class Ida_Account_Test
     Assert.Equal("12345 Test 345.6", actual);
 
   }
+
+  [Fact]
+  public void ToString_otherData_returnsCorrectly()
+  {
+    // Arrange
+    CultureInfo.CurrentCulture = new CultureInfo("en-GB");
+
+    var account = new Account();
+    account.accountNumber = 11111;
+    account.accountType = "Hej";
+    account.balance = 123.4F;
+
+    // Act
+    var actual = account.ToString();
+
+    // Assert
+    Assert.Equal("11111 Hej 123.4", actual);
+
+  }
 }
